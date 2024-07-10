@@ -29,7 +29,7 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'inc/navbar.html' %}
     {% block body %}{% endblock body %}
-    {% include 'footer.html' %}
+    {% include 'inc/footer.html' %}
 
     <script src="{% static "assets/js/jquery.min.js" %}"></script>
     <script src="{% static "assets/js/bootstrap.bundle.min.js" %}"></script>
