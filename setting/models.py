@@ -7,6 +7,7 @@ def specialty_image_directory_path(instance, filename):
 
 class Specialty(models.Model):
     specialty = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
     image = models.ImageField(
         upload_to=specialty_image_directory_path, blank=False, null=True
     )
