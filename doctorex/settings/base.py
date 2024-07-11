@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "setting.apps.SettingConfig",
     "reservation.apps.ReservationConfig",
-    "fixture_media",
 ]
 
 MIDDLEWARE = [
