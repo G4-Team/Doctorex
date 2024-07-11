@@ -1,0 +1,110 @@
+[
+    {
+        "model": "setting.specialty",
+        "pk": 1,
+        "fields": {
+            "specialty": "مغز و اعصاب",
+            "slug": "neurologist",
+            "image": "images/neurologist.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 2,
+        "fields": {
+            "specialty": "زنان و زایمان",
+            "slug": "women",
+            "image": "images/women.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 3,
+        "fields": {
+            "specialty": "پوست، مو و زیبایی",
+            "slug": "skin",
+            "image": "images/skin.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 4,
+        "fields": {
+            "specialty": "روانشناس",
+            "slug": "psychology",
+            "image": "images/psychology.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 5,
+        "fields": {
+            "specialty": "غدد",
+            "slug": "endocrinologist",
+            "image": "images/endocrinologist.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 6,
+        "fields": {
+            "specialty": "کودکان",
+            "slug": "kids",
+            "image": "images/kids.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 7,
+        "fields": {
+            "specialty": "داخلی",
+            "slug": "general",
+            "image": "images/general.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 8,
+        "fields": {
+            "specialty": "ارتوپد",
+            "slug": "orthopedist",
+            "image": "images/orthopedist.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 9,
+        "fields": {
+            "specialty": "قلب و عروق",
+            "slug": "cardiologist",
+            "image": "images/cardiologist.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 10,
+        "fields": {
+            "specialty": "دندان پزشک",
+            "slug": "dentist",
+            "image": "images/dentist.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 11,
+        "fields": {
+            "specialty": "چشم پزشکی",
+            "slug": "eye",
+            "image": "images/eye.png"
+        }
+    },
+    {
+        "model": "setting.specialty",
+        "pk": 12,
+        "fields": {
+            "specialty": "گوش و حلق و بینی",
+            "slug": "ent",
+            "image": "images/ent.png"
+        }
+    }
+]
