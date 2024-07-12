@@ -57,7 +57,7 @@ class Command(BaseCommand):
             file_paths = pattern.findall(open(fixture).read())
             if file_paths:
                 for fp in file_paths:
-                    fixture_media = os.path.join(root, "media")
+                    fixture_media = os.path.join(root, "images")
                     fixture_path = os.path.join(fixture_media, fp)
                     if not os.path.exists(fixture_path):
                         self.stderr.write(

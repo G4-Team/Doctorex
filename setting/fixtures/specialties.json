@@ -5,7 +5,7 @@
         "fields": {
             "specialty": "مغز و اعصاب",
             "slug": "neurologist",
-            "image": "images/neurologist.png"
+            "image": "specialties/neurologist.png"
         }
     },
     {
@@ -14,7 +14,7 @@
         "fields": {
             "specialty": "زنان و زایمان",
             "slug": "women",
-            "image": "images/women.png"
+            "image": "specialties/women.png"
         }
     },
     {
@@ -23,7 +23,7 @@
         "fields": {
             "specialty": "پوست، مو و زیبایی",
             "slug": "skin",
-            "image": "images/skin.png"
+            "image": "specialties/skin.png"
         }
     },
     {
@@ -32,7 +32,7 @@
         "fields": {
             "specialty": "روانشناس",
             "slug": "psychology",
-            "image": "images/psychology.png"
+            "image": "specialties/psychology.png"
         }
     },
     {
@@ -41,7 +41,7 @@
         "fields": {
             "specialty": "غدد",
             "slug": "endocrinologist",
-            "image": "images/endocrinologist.png"
+            "image": "specialties/endocrinologist.png"
         }
     },
     {
@@ -50,7 +50,7 @@
         "fields": {
             "specialty": "کودکان",
             "slug": "kids",
-            "image": "images/kids.png"
+            "image": "specialties/kids.png"
         }
     },
     {
@@ -59,7 +59,7 @@
         "fields": {
             "specialty": "داخلی",
             "slug": "general",
-            "image": "images/general.png"
+            "image": "specialties/general.png"
         }
     },
     {
@@ -68,7 +68,7 @@
         "fields": {
             "specialty": "ارتوپد",
             "slug": "orthopedist",
-            "image": "images/orthopedist.png"
+            "image": "specialties/orthopedist.png"
         }
     },
     {
@@ -77,7 +77,7 @@
         "fields": {
             "specialty": "قلب و عروق",
             "slug": "cardiologist",
-            "image": "images/cardiologist.png"
+            "image": "specialties/cardiologist.png"
         }
     },
     {
@@ -86,7 +86,7 @@
         "fields": {
             "specialty": "دندان پزشک",
             "slug": "dentist",
-            "image": "images/dentist.png"
+            "image": "specialties/dentist.png"
         }
     },
     {
@@ -95,7 +95,7 @@
         "fields": {
             "specialty": "چشم پزشکی",
             "slug": "eye",
-            "image": "images/eye.png"
+            "image": "specialties/eye.png"
         }
     },
     {
@@ -104,7 +104,7 @@
         "fields": {
             "specialty": "گوش و حلق و بینی",
             "slug": "ent",
-            "image": "images/ent.png"
+            "image": "specialties/ent.png"
         }
     }
 ]
