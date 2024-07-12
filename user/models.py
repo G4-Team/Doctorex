@@ -57,8 +57,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    # patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
-    # doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
+    is_doctor = models.BooleanField(default=False)
+    balance = models.IntegerField(default=0)
 
     objects = CustomAccountManager()
 
@@ -70,8 +70,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
 
 class Patient(models.Model):
-    balance = models.IntegerField(default=100_000)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     def __str__(self):
         return (
@@ -80,13 +79,13 @@ class Patient(models.Model):
 
 
 class Doctor(models.Model):
-    balance = models.IntegerField(default=0)
+
     visit_cost = models.IntegerField(default=100_000)
     clinic_address = models.CharField(max_length=255)
     specialty = models.ForeignKey(
         Specialty, on_delete=models.CASCADE, related_name="doctors"
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Dr. {self.account.first_name} {self.account.last_name}"
