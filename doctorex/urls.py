@@ -7,7 +7,7 @@ urlpatterns = (
     [
         path("admin/", admin.site.urls),
         path("", include("reservation.urls")),
-        path("account/", include("user.urls")),
+        path("account/", include("user.urls", namespace="account")),
         path("setting/", include("setting.urls", namespace="setting")),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
