@@ -76,7 +76,7 @@ class Patient(models.Model):
     def __str__(self):
         return (
             "Mr." if self.account.gender == "M" else "Mrs."
-        ) + f"Dr. {self.account.first_name} {self.account.last_name}"
+        )
 
 
 class Doctor(models.Model):
