@@ -59,6 +59,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
     balance = models.IntegerField(default=0)
+    image = models.ImageField(upload_to="users/", null=True, blank=True)
 
     objects = CustomAccountManager()
 
@@ -79,7 +80,6 @@ class Patient(models.Model):
 
 
 class Doctor(models.Model):
-
     visit_cost = models.IntegerField(default=100_000)
     clinic_address = models.CharField(max_length=255)
     specialty = models.ForeignKey(
