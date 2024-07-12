@@ -84,6 +84,10 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 STATIC_URL = "static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
 
+# MEDIA
+MEDIA_ROOT = str(BASE_DIR / "media")
+MEDIA_URL = "/media/"
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.Account"
