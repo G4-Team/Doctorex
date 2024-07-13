@@ -11,5 +11,6 @@ class IndexView(View):
 
 class SearchView(View):
     def get(self, request, search_content):
-        doctors = Doctor.objects.filter(name__icontains=search_content)
+        doctors = Doctor.objects.filter(name__icontains=search_content) | Doctor.objects.filter(
+            specialty__specialty__icontains=search_content)
         return render(request, "reservation/search.html", {"doctors": doctors})
