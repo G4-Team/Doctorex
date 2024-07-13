@@ -57,7 +57,8 @@
                       <div class="d-flex align-items-center justify-content-end">
                           <div class="btn-group header-btn-group shadow-sm rounded-pill">
                               <div class="dropdown">
-                                  <a href="#register" data-bs-toggle="dropdown" aria-expanded="false"
+                                  {% if request.user.is_authenticated %}
+                                  <a href="" data-bs-toggle="dropdown" aria-expanded="false"
                                       role="button" class="btn btn-white header-register border-0 rounded-pill">
                                       <i class="bi bi-person-circle font-20 text-muted me-1"></i>
                                       <span>ثبت نام | ورود</span>
@@ -94,6 +95,18 @@
                                           </a>
                                       </li>
                                   </ul>
+                                  {% else %}
+                                      <a href="{% url 'account:signup' %}" aria-expanded="false"
+                                      role="button" class="btn btn-white header-register border-0 rounded-pill">
+                                      <i class="bi bi-person-circle font-20 text-muted me-1"></i>
+                                      <span>ثبت نام</span>
+                                      </a>
+                                      <a href="" aria-expanded="false"
+                                      role="button" class="btn btn-white header-register border-0 rounded-pill">
+                                      <i class="bi bi-person-circle font-20 text-muted me-1"></i>
+                                      <span>ورود</span>
+                                      </a>
+                                  {% endif %}
                               </div>
                           </div>
                       </div>
