@@ -46,3 +46,12 @@ class RegisterForm(forms.Form):
         p2 = cd.get('password2')
         if p1 and p2 and p1 != p2:
             raise ValidationError('گذرواژه های وارد شده با یکدیگر همخوانی ندارند!')
+
+
+class SigninForm(forms.Form):
+    email = forms.EmailField(label='ایمیل', min_length=3, max_length=50, widget=forms.EmailInput(
+        attrs={'class': 'form-control'}
+    ))
+    password = forms.CharField(label='گذرواژه', min_length=6, max_length=50, widget=forms.PasswordInput(
+        attrs={'class': 'form-control'}
+    ))
