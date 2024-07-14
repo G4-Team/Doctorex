@@ -181,7 +181,7 @@
         "pk": 2,
         "fields": {
             "clinic_address": "اصفهان",
-            "specialty": 2,
+            "specialty": 1,
             "account": 2
         }
     },
@@ -190,7 +190,7 @@
         "pk": 3,
         "fields": {
             "clinic_address": "اصفهان",
-            "specialty": 3,
+            "specialty": 1,
             "account": 3
         }
     },
@@ -199,7 +199,7 @@
         "pk": 4,
         "fields": {
             "clinic_address": "اصفهان",
-            "specialty": 4,
+            "specialty": 1,
             "account": 4
         }
     },
