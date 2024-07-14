@@ -10,6 +10,6 @@ doctor_urls = [
 
 urlpatterns = [
     path("signup/", views.SignupView.as_view(), name="signup"),
-    path('login', views.LoginView.as_view(), name='login'),
+    path('signin/', views.SigninView.as_view(), name='signin'),
     path("doctor/", include(doctor_urls), name="doctor"),
 ]
