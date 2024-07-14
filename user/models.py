@@ -74,9 +74,7 @@ class Patient(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     def __str__(self):
-        return (
-            "Mr." if self.account.gender == "M" else "Mrs."
-        )
+        return "Mr." if self.account.gender == "M" else "Mrs."
 
 
 class Doctor(models.Model):
@@ -86,6 +84,7 @@ class Doctor(models.Model):
         Specialty, on_delete=models.CASCADE, related_name="doctors"
     )
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    avg_rate = models.FloatField(default=0)
 
     def __str__(self):
         return f"Dr. {self.account.first_name} {self.account.last_name}"
