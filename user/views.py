@@ -65,7 +65,7 @@ class ProfileView(View):
         form = ProfileForm(instance=user)
         comments = Comment.objects.filter(author=user)
 
-        return render(request, "user/profile.html", {"form": form,"comments": comments})
+        return render(request, "user/profile.html", {"form": form, "comments": comments})
     def post(self, request):
         user = request.user
         form = ProfileForm(request.POST, instance=user)
