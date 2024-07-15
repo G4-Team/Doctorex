@@ -58,7 +58,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
-    balance = models.IntegerField(default=0)
+    balance = models.IntegerField(default=500000)
     image = models.ImageField(upload_to="users/", null=True, blank=True)
 
     objects = CustomAccountManager()
