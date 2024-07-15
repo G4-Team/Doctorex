@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.views import View
 
@@ -72,3 +72,10 @@ class SigninView(View):
                 return redirect('index')
             messages.error(request, 'نام کاربری یا کلمه عبور اشتباه است.', 'warning')
         return render(request, self.template_name, {"form": form})
+
+
+class SignoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'به امید دیدار مجدد', 'success')
+        return redirect('index')
