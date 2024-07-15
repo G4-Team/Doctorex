@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block body %}
+<h1>Hi: {{ user.first_name }} {{ user.last_name }}</h1>
+
+<h2>Your Reservations</h2>
+<ul>
+    {% if reservations %}
+        {% for reservation in reservations %}
+            <li>
+                <p>Visit Time: {{ reservation.visit_time }}</p>
+                <p>Doctor: {{ reservation.visit_time.doctor }}</p>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>No reservations found.</li>
+    {% endif %}
+</ul>
+
+{% endblock body %}
