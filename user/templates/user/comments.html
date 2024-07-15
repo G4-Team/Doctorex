@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block body %}
+<h1>Hi: {{ user.first_name }} {{ user.last_name }}</h1>
+
+<h2>Your Comments</h2>
+<ul>
+    {% if comments %}
+        {% for comment in comments %}
+            <li>
+                <strong>{{ comment.title }}</strong> ({{ comment.get_score_display }})
+                <p>{{ comment.text }}</p>
+                <p>Doctor: {{ comment.doctor }}</p>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>No comments found.</li>
+    {% endif %}
+</ul>
+
+{% endblock body %}

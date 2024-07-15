@@ -1,12 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, render
 from django.views import View
 
+from reservation.models import Comment, Reservation
 from user.models import Account, Patient
 
-from .forms import RegisterForm, SigninForm
+from .forms import RegisterForm, SigninForm, ProfileForm
 from .models import Doctor
 
 
@@ -92,3 +95,40 @@ class DoctorListView(View):
             template_name="user/partial/_doctors-list.html",
             context=context,
         )
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileView(View):
+    def get(self, request):
+        user = request.user
+        form = ProfileForm(instance=user)
+        comments = Comment.objects.filter(author=user)
+
+        return render(request, "user/profile.html", {"form": form, "comments": comments})
+
+    def post(self, request):
+        user = request.user
+        form = ProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        comments = Comment.objects.filter(author=user)
+        return render(request, "user/profile.html", {"form": form, "comments": comments})
+
+
+class ProfileVisitHistory(View):
+    def get(self, request):
+        user = request.user
+        try:
+            patient = Patient.objects.get(account=user)
+            reservations = Reservation.objects.filter(patient=patient)
+        except Patient.DoesNotExist:
+            reservations = None
+        return render(request, "user/visit_history.html", {"reservations": reservations})
+
+
+class ProfileCommentView(View):
+    def get(self, request):
+        user = request.user
+        comments = Comment.objects.filter(author=user)
+        return render(request, "user/comments.html", {"comments": comments})
