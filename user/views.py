@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db.models import Avg
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
-from reservation.models import Comment
+from reservation.models import Comment, VisitTime, Reservation
 from .forms import RegisterForm, LoginForm, UserForm
 from .models import Doctor, Patient
 
@@ -46,7 +46,7 @@ class DoctorListView(View):
     def get(self, request):
         from time import sleep
 
-        sleep(20)
+        sleep(5)
         doctors = Doctor.objects.annotate(
             average_score=Avg('visittime__reservation__comments__score')
         ).all().select_related("account", "specialty")
@@ -76,11 +76,26 @@ class ProfileView(View):
         return render(request, 'user/profile.html', {'form': form})
 
 
-class ContactView(View):
-    def get(self, request):
-        comments = Comment.objects.filter(author=request.user).all()
-        return render(request, 'user/comment.html', {'comments': comments})
+class DoctorDetailView(View):
+    def get(self, request, id: int):
+        doctor = Doctor.objects.annotate(
+            average_score=Avg('visittime__reservation__comments__score')
+        ).get(id=id)
+        times = VisitTime.objects.filter(doctor=doctor, is_reserved=False).all()
+        reserved_times = Reservation.objects.filter(patient__account=request.user,
+                                                    visit_time__doctor=doctor).all()
+        comments = Comment.objects.filter(reservation__visit_time__doctor=doctor).all()
 
-    def post(self, request):
-        ...
+        return render(request, 'user/doctor.html',
+                      {'doctor': doctor, 'times': times, 'reserved_times': reserved_times, 'comments': comments})
 
+    def post(self, request, id: int):
+        visit_time_id = request.POST.get('time')
+        visit_time = get_object_or_404(VisitTime, id=visit_time_id)
+        patient = get_object_or_404(Patient, account=request.user)
+        Reservation.objects.create(patient=patient, visit_time=visit_time)
+        visit_time.is_reserved = True
+        visit_time.save()
+
+        messages.success(request, 'رزرو شما با موفقیت انجام شد!')
+        return redirect('index')

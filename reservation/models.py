@@ -17,7 +17,7 @@ class Transaction(models.Model):
 class Comment(models.Model):
     scores = {
         1: 'very bad',
-        2:'bad',
+        2: 'bad',
         3: 'not bad',
         4: 'good',
         5: 'very good',

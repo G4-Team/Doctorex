@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, Patient, Doctor
+from .models import Account, Patient, Doctor, VisitTime
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -24,6 +24,14 @@ class UserAdminConfig(UserAdmin):
     )
 
 
+class VisitTimeAdmin(admin.ModelAdmin):
+    list_display = ('doctor', 'weekday', 'start_time', 'end_time', 'is_reserved')
+    list_filter = ('doctor', 'weekday', 'is_reserved')
+    search_fields = ('doctor__account', 'weekday')
+    list_editable = ('is_reserved',)
+
+
 admin.site.register(Account, UserAdminConfig)
 admin.site.register(Patient)
 admin.site.register(Doctor)
+admin.site.register(VisitTime, VisitTimeAdmin)

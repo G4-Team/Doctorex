@@ -3,6 +3,7 @@
         <div class="swiper-wrapper">
             {% for doctor in doctors %}
                 <div class="swiper-slide justify-content-center align-content-center">
+                    <a href="{% url 'account:doctors-detail' id=doctor.id %}">
                     <div class="item">
                         <p class="pheader">{{doctor.account.first_name}} {{doctor.account.last_name}}</p>
                         {% if doctor.account.image %}
@@ -19,6 +20,7 @@
                             </div>
                         </div>
                     </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

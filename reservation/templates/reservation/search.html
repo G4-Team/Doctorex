@@ -16,6 +16,7 @@
                 <div class="swiper doctor-swiper">
                     <div class="swiper-wrapper">
                         {% for doctor in doctors %}
+                            <a>
                             <div class="swiper-slide justify-content-center align-content-center">
                                 <div class="item">
                                     <p class="pheader">{{ doctor.account.first_name }} {{ doctor.account.last_name }}</p>
@@ -36,6 +37,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </a>
                         {% endfor %}
                     </div>
                     <div class="swiper-button-next"></div>
