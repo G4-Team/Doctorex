@@ -13,7 +13,7 @@ class CustomAccountManager(BaseUserManager):
         self, email, username, first_name, last_name, password, **extra_fields
     ):
         if not email:
-            raise ValueError("you must provide an email address")
+            raise ValueError("لطفاً ایمیل خود را وارد کنید.")
 
         email = self.normalize_email(email)
         user = self.model(

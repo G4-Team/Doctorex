@@ -25,6 +25,10 @@ class UserAdminConfig(UserAdmin):
     )
 
 
+class PatientAdmin(admin.ModelAdmin):
+    raw_id_fields = ('account',)
+
+
 admin.site.register(Account, UserAdminConfig)
-admin.site.register(Patient)
+admin.site.register(Patient, PatientAdmin)
 admin.site.register(Doctor)
