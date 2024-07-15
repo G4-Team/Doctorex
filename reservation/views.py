@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.db.models import Avg
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from user.models import Doctor
@@ -37,3 +37,28 @@ class CommentView(View):
             return HttpResponseRedirect(previous_url)
 
         print(form.errors)
+
+
+class CommentEditView(View):
+    def get(self, request, comment_id):
+        comment = get_object_or_404(Comment, pk=comment_id)
+
+        if comment.author != request.user:
+            return redirect('index')
+
+        return render(request, 'comment.html', {'comment': comment})
+
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comment, pk=comment_id)
+
+        if comment.author != request.user:
+            return redirect('index')
+
+        form = CommentForm(request.POST, instance=comment)
+
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+        print(form.errors)
+        return render(request, 'comment.html', {'comment': comment})
