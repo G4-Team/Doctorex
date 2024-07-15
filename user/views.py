@@ -124,7 +124,7 @@ class ProfileVisitHistory(View):
             reservations = Reservation.objects.filter(patient=patient)
         except Patient.DoesNotExist:
             reservations = None
-        return render(request, "user/visit_history.html", {"reservations": reservations})
+        return render(request, "user/visit_history.html", {"reservations":reservations})
 
 
 class ProfileCommentView(View):
