@@ -40,7 +40,7 @@ class SignupView(View):
             Patient.objects.create(account=user)
             messages.success(
                 request,
-                "حساب کاربری با موفقیت ایجاد شد. پس از تأیید مدیریت، امکان ورود به سایت را خواهید داشت.",
+                "حساب کاربری با موفقیت ایجاد شد. پس از تأیید ایمیل، امکان ورود به سایت را خواهید داشت.",
                 "success",
             )
             return redirect("index")
