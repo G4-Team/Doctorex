@@ -55,3 +55,9 @@ class SigninForm(forms.Form):
     password = forms.CharField(label='گذرواژه', min_length=6, max_length=50, widget=forms.PasswordInput(
         attrs={'class': 'form-control'}
     ))
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['username', 'first_name', 'last_name', 'email', 'gender', 'phone_number']
