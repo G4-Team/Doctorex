@@ -46,7 +46,7 @@ class CustomAccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    GENDERS = {"M": "Male", "F": "Female"}
+    GENDERS = {"M": "مرد", "F": "زن"}
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=50, blank=True)
@@ -74,7 +74,7 @@ class Patient(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Mr." if self.account.gender == "M" else "Mrs."
+        return f'{"آقای" if self.account.gender == "M" else "خانم"} {self.account.first_name} {self.account.last_name}'
 
 
 class Doctor(models.Model):
@@ -92,13 +92,13 @@ class Doctor(models.Model):
 
 class VisitTime(models.Model):
     WEEK_DAYS = {
-        "SAT": "Saturday",
-        "SUN": "Sunday",
-        "MON": "Monday",
-        "TUE": "Tuesday",
-        "WED": "Wednesday",
-        "THU": "Thursday",
-        "FRI": "Friday",
+        "SAT": "شنبه",
+        "SUN": "یکشنبه",
+        "MON": "دوشنبه",
+        "TUE": "سه شنبه",
+        "WED": "چهارشنبه",
+        "THU": "پنج شنبه",
+        "FRI": "جمعه",
     }
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     weekday = models.CharField(max_length=3, choices=WEEK_DAYS)
@@ -107,4 +107,4 @@ class VisitTime(models.Model):
     is_reserved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Dr. {self.doctor.account} {self.weekday} {self.start_time}"
+        return f"دکتر {self.doctor.account} {self.weekday} {self.start_time}"

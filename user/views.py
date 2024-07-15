@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
 
-from user.models import Account
+from user.models import Account, Patient
 
 from .forms import RegisterForm, SigninForm
 from .models import Doctor
@@ -27,13 +27,14 @@ class SignupView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            Account.objects.create_user(
+            user = Account.objects.create_user(
                 cd['email'],
                 cd['username'],
                 cd['first_name'],
                 cd['last_name'],
                 cd['password1'],
             )
+            Patient.objects.create(account=user)
             messages.success(
                 request,
                 "حساب کاربری با موفقیت ایجاد شد. پس از تأیید مدیریت، امکان ورود به سایت را خواهید داشت.",
