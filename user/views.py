@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from django.views import View
 
@@ -15,8 +16,10 @@ class DoctorListView(View):
     def get(self, request):
         from time import sleep
 
-        sleep(20)
-        doctors = Doctor.objects.all().select_related("account", "specialty")
+        # sleep(20)
+        doctors = Doctor.objects.annotate(
+            average_score=Avg('visittime__reservation__comments__score')
+        ).all().select_related("account", "specialty")
         context = {
             "doctors": doctors,
         }

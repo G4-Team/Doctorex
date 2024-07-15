@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from django.views import View
 
@@ -14,4 +15,5 @@ class SearchView(View):
         doctors = (Doctor.objects.filter(account__first_name__icontains=search_content) |
                    Doctor.objects.filter(specialty__specialty__icontains=search_content) |
                    Doctor.objects.filter(account__last_name__icontains=search_content))
+        doctors.annotate(average_score=Avg('visittime__reservation__comments__score'))
         return render(request, "reservation/search.html", {"doctors": doctors})

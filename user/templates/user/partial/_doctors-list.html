@@ -14,7 +14,7 @@
                                     <p class="pfooter">{{doctor.specialty.specialty}}</p>
                                 </div>
                                 <div class="col-4">
-                                    <p class="pfooter">امتیاز ۴.۵</p>
+                                    <p class="pfooter">امتیاز {% if doctor.average_score %}{{ doctor.average_score }}{% else %} * {% endif %}</p>
                                 </div>
                             </div>
                         </div>
