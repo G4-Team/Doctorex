@@ -91,3 +91,6 @@ MEDIA_URL = "/media/"
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.Account"
+
+# default login url
+LOGIN_URL = '/account/signin/'

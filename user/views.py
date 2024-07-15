@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
 
@@ -12,6 +13,11 @@ from .models import Doctor
 class SignupView(View):
     form_class = RegisterForm
     template_name = 'user/signup.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         form = self.form_class()
@@ -37,26 +43,15 @@ class SignupView(View):
         return render(request, self.template_name, {"form": form})
 
 
-class DoctorListView(View):
-    def get(self, request):
-        from time import sleep
-
-        sleep(2)
-        doctors = Doctor.objects.all().select_related("account", "specialty")
-        context = {
-            "doctors": doctors,
-        }
-
-        return render(
-            request=request,
-            template_name="user/partial/_doctors-list.html",
-            context=context,
-        )
-
-
 class SigninView(View):
     form_class = SigninForm
     template_name = 'user/signin.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         form = self.form_class
         return render(request, self.template_name, {"form": form})
@@ -74,8 +69,25 @@ class SigninView(View):
         return render(request, self.template_name, {"form": form})
 
 
-class SignoutView(View):
+class SignoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         messages.success(request, 'به امید دیدار مجدد', 'success')
         return redirect('index')
+
+
+class DoctorListView(View):
+    def get(self, request):
+        from time import sleep
+
+        sleep(2)
+        doctors = Doctor.objects.all().select_related("account", "specialty")
+        context = {
+            "doctors": doctors,
+        }
+
+        return render(
+            request=request,
+            template_name="user/partial/_doctors-list.html",
+            context=context,
+        )
