@@ -90,9 +90,19 @@ class DoctorDetailView(View):
                       {'doctor': doctor, 'times': times, 'reserved_times': reserved_times, 'comments': comments})
 
     def post(self, request, id: int):
+        user = request.user
         visit_time_id = request.POST.get('time')
         visit_time = get_object_or_404(VisitTime, id=visit_time_id)
-        patient = get_object_or_404(Patient, account=request.user)
+
+        if user.balance < visit_time.doctor.visit_cost:
+            return redirect('balance')
+
+        user.balance -= visit_time.doctor.visit_cost
+        visit_time.doctor.account.balance += visit_time.doctor.visit_cost
+        user.save()
+        visit_time.doctor.save()
+
+        patient = get_object_or_404(Patient, account=user)
         Reservation.objects.create(patient=patient, visit_time=visit_time)
         visit_time.is_reserved = True
         visit_time.save()

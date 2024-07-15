@@ -126,7 +126,13 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">رزرو نوبت</button>
+                            <p>موجودی شما: <strong>{{ user.balance }}</strong>, هزینه ویزیت دکتر: <strong>{{ doctor.visit_cost }}</strong></p>
+
+                            {% if user.balance > doctor.visit_cost %}
+                                <button type="submit" class="btn btn-primary btn-block">رزرو نوبت</button>
+                            {% else %}
+                                <a type="submit" class="btn btn-success btn-block">افزایش موجودی</a>
+                            {% endif %}
                         </form>
                     </div>
                     <div class="card mb-3 p-5">
