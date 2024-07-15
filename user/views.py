@@ -4,7 +4,8 @@ from django.db.models import Avg
 from django.shortcuts import render, redirect
 from django.views import View
 
-from .forms import RegisterForm, LoginForm
+from reservation.models import Comment
+from .forms import RegisterForm, LoginForm, UserForm
 from .models import Doctor, Patient
 
 
@@ -58,3 +59,28 @@ class DoctorListView(View):
             template_name="user/partial/_doctors-list.html",
             context=context,
         )
+
+
+class ProfileView(View):
+    def get(self, request):
+        return render(request, 'user/profile.html')
+
+    def post(self, request):
+        form = UserForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('index')
+        print(form.errors)
+        return render(request, 'user/profile.html', {'form': form})
+
+
+class ContactView(View):
+    def get(self, request):
+        comments = Comment.objects.filter(author=request.user).all()
+        return render(request, 'user/comment.html', {'comments': comments})
+
+    def post(self, request):
+        ...
+

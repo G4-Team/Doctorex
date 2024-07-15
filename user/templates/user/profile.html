@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctorex|Profile{% endblock %}
+
+{% block body %}
+    <h2>User Profile</h2>
+    <div class="d-flex justify-content-center full-height">
+        <div class="row bg-white p-5 border rounded">
+            <div class="col-12">
+                <h2 class="text-center">Profile</h2>
+            </div>
+            <div class="col-12">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username"
+                               placeholder="یوزرنیم خود را وارد کنید" value="{{ user.username }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name">Firstname</label>
+                        <input type="text" class="form-control" name="first_name" id="first_name"
+                               placeholder="نام خود را وارد کنید" value="{{ user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Lastname</label>
+                        <input type="text" class="form-control" name="last_name" id="last_name"
+                               placeholder="نام خانوادگی خود را وارد کنید" value="{{ user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email"
+                               placeholder="ایمیل خود را وارد کنید" value="{{ user.email }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Phone number</label>
+                        <input type="password" class="form-control" name="phone_number" id="phone_number"
+                               placeholder="شماره تلفن" value="{{ user.phone_number }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select class="form-control" name="gender" id="gender">
+                            <option value="M" {% if user.gender == "M" %} selected {% endif %}>Male</option>
+                            <option value="F" {% if user.gender == "F" %} selected {% endif %}>Female</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
