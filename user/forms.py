@@ -1,7 +1,9 @@
 from django import forms
 
+from .models import Account
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(label='Username', min_length=3, max_length=50)
-    email = forms.EmailField(label='Email', min_length=3, max_length=50)
-    password = forms.CharField(label='Password', min_length=6, max_length=50)
+
+class RegisterForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
