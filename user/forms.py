@@ -46,3 +46,8 @@ class RegisterForm(forms.Form):
         p2 = cd.get('password2')
         if p1 and p2 and p1 != p2:
             raise ValidationError('گذرواژه های وارد شده با یکدیگر همخوانی ندارند!')
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['username', 'first_name', 'last_name', 'email', 'gender', 'phone_number']
