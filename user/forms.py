@@ -7,3 +7,8 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['username', 'first_name', 'last_name', 'email', 'password']
+
+
+class LoginForm(forms.Form):
+    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
