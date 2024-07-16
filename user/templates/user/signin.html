@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctorex|ورود{% endblock %}
+
+{% block head %}
+    <style>
+        .jumbotron{
+            padding: 20px;
+            margin-bottom: 20px;
+
+        }
+    </style>
+{% endblock head %}
+
+{% block body %}
+    <h2 class="jumbotron">خوش آمدید!</h2>
+    <div class="jumbotron">
+        <form action='' method="post" class="col-md-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type='submit' value="ورود" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock body %}

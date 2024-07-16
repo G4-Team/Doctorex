@@ -1,0 +1,278 @@
+[
+    {
+        "model": "user.account",
+        "pk": 1,
+        "fields": {
+            "email": "anahita.shahingohar@gmail.com",
+            "username": "anahita-shahingohar",
+            "first_name": "آناهیتیا",
+            "last_name": "شاهین گهر",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor2.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 2,
+        "fields": {
+            "email": "shahriar.fattahi@gmail.com",
+            "username": "shahriar-fattahi",
+            "first_name": "شهریار",
+            "last_name": "فتاحی",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor1.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 3,
+        "fields": {
+            "email": "anila.moieni@gmail.com",
+            "username": "anila-moieni",
+            "first_name": "آنیلا",
+            "last_name": "معینی",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor3.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 4,
+        "fields": {
+            "email": "alireza.pourseirafi@gmail.com",
+            "username": "alireza-pourseirafi",
+            "first_name": "علیرضا",
+            "last_name": "پورصیرفی",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor4.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 5,
+        "fields": {
+            "email": "brandon.quinn@gmail.com",
+            "username": "brandon-quinn",
+            "first_name": "Brandon",
+            "last_name": "Quinn",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor1.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 6,
+        "fields": {
+            "email": "abigail.peake@gmail.com",
+            "username": "abigail-peake",
+            "first_name": "Abigail",
+            "last_name": "Peake",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor4.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 7,
+        "fields": {
+            "email": "jennifer.lyman@gmail.com",
+            "username": "jennifer-lyman",
+            "first_name": "Jennifer",
+            "last_name": "Lyman",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor2.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 8,
+        "fields": {
+            "email": "lisa.black@gmail.com",
+            "username": "lisa-black",
+            "first_name": "Lisa",
+            "last_name": "Black",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor3.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 9,
+        "fields": {
+            "email": "roya.nikan@gmail.com",
+            "username": "roya-nikan",
+            "first_name": "رویا",
+            "last_name": "نیکان",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor2.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 10,
+        "fields": {
+            "email": "shahram.sary@gmail.com",
+            "username": "shahram-sary",
+            "first_name": "شهرام",
+            "last_name": "ساری",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor1.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 11,
+        "fields": {
+            "email": "marjan.haghighat@gmail.com",
+            "username": "marjan-haghighat",
+            "first_name": "مرجان",
+            "last_name": "حقیقت",
+            "password": "password",
+            "gender": "F",
+            "is_doctor": true,
+            "image": "users/doctor3.png"
+        }
+    },
+    {
+        "model": "user.account",
+        "pk": 12,
+        "fields": {
+            "email": "mohammad.sadeghi@gmail.com",
+            "username": "mohammad-sadeghi",
+            "first_name": "محمد",
+            "last_name": "صادقی",
+            "password": "password",
+            "gender": "M",
+            "is_doctor": true,
+            "image": "users/doctor4.png"
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 1,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 1,
+            "account": 1
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 2,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 1,
+            "account": 2
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 3,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 1,
+            "account": 3
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 4,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 1,
+            "account": 4
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 5,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 5,
+            "account": 5
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 6,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 6,
+            "account": 6
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 7,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 7,
+            "account": 7
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 8,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 8,
+            "account": 8
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 9,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 9,
+            "account": 9
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 10,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 10,
+            "account": 10
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 11,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 11,
+            "account": 11
+        }
+    },
+    {
+        "model": "user.doctor",
+        "pk": 12,
+        "fields": {
+            "clinic_address": "اصفهان",
+            "specialty": 12,
+            "account": 12
+        }
+    }
+]

@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}Doctorex|Register{% endblock %}
+{% block title %}Doctorex|ثبت نام{% endblock %}
 
-{% block content %}
-    <h2>Register Now!</h2>
-    <form action='' method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type='submit' value="Signup">
-    </form>
-{% endblock content %}
+{% block head %}
+    <style>
+        .jumbotron{
+            padding: 20px;
+            margin-bottom: 20px;
+
+        }
+    </style>
+{% endblock head %}
+
+{% block body %}
+    <h2 class="jumbotron">به راحتی ثبت نام کن!</h2>
+    <div class="jumbotron">
+        <form action='' method="post" class="col-md-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type='submit' value="ثبت نام" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock body %}

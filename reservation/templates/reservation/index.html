@@ -1,7 +1,90 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}Doctorex{% endblock title %}
+{% block body %}
+<div class="content d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div
+                class="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-center flex-wrap">
+                <div class="title d-flex align-items-center justify-content-center">
+                    <h5 class="font-12 ms-3"><span class="d-inline-block ms-1">لیست تخصص‌ها</span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="specialties">
+                <div class="container-fluid"
+                    id="specialties-list"
+                    hx-get={% url "setting:specialties-list" %}
+                    hx-trigger="load"
+                    hx-swap="innerHTML"
+                    hx-target="#specialties-list"
+                >
+                    <div class="row flex-row flex-nowrap" style="overflow-x: hidden; !important;">
+                        {% for i in "123456"|make_list %}
+                            <div class="skeleton">
+                                <div class="square"></div>
+                            </div>
+                        {% endfor %}   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div
+                class="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-center flex-wrap">
+                <div class="title d-flex align-items-center justify-content-center">
+                    <h5 class="font-12 ms-3"><span class="d-inline-block ms-1">لیست پزشک‌ها</span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="doctors">
+                <div class="container-fluid"
+                    id="doctors-list"
+                    hx-get={% url "account:doctors-list" %}
+                    hx-trigger="load"
+                    hx-swap="innerHTML"
+                    hx-target="#doctors-list"
+                >
+                    <div class="row flex-row flex-nowrap" style="overflow-x: hidden; !important;">
+                        {% for i in "123456"|make_list %}
+                            <div class="skeleton">
+                                <div class="card"></div>
+                            </div>
+                        {% endfor %}   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
 
-{% block content %}
-    <h1>Welcome To Doctorex!</h1>
-{% endblock content %}
+{% block js_script %}
+    <script>
+        $(document).on('htmx:afterSwap', function(event) {
+            if ($(event.target).is('#specialties-list')) {
+                $.getScript("{% static "assets/js/app.js" %}")
+                    .done(function(script, textStatus) {
+                    })
+                    .fail(function(jqxhr, settings, exception) {
+                    });
+            }
+        });
+        $(document).on('htmx:afterSwap', function(event) {
+            if ($(event.target).is('#doctors-list')) {
+                $.getScript("{% static "assets/js/app.js" %}")
+                    .done(function(script, textStatus) {
+                    })
+                    .fail(function(jqxhr, settings, exception) {
+                    });
+            }
+        });
+    </script>
+{% endblock js_script %}

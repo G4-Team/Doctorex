@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="swiper specialty-swiper">
+        <div class="swiper-wrapper"> 
+            {% for specialty in specialties %}
+            
+                <div class="swiper-slide justify-content-center align-content-center">
+                    <div class="item">
+                        <p class="pheader">{{ specialty.specialty }}</p>
+                        <a href={% url "setting:specialty" specialty.slug %}>
+                            <img src="{{ specialty.image.url }}">
+                        </a>
+                        <p class="pfooter">تعداد پزشک: {{ specialty.doctors_count }}</p>
+                    </div>
+                </div>
+            
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
