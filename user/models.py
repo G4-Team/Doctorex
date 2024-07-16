@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
 from django.db import models
+from django.utils.crypto import get_random_string
 
 from setting.models import Specialty
 
@@ -13,7 +15,7 @@ class CustomAccountManager(BaseUserManager):
         self, email, username, first_name, last_name, password, **extra_fields
     ):
         if not email:
-            raise ValueError("you must provide an email address")
+            raise ValueError("لطفاً ایمیل خود را وارد کنید.")
 
         email = self.normalize_email(email)
         user = self.model(
@@ -108,3 +110,13 @@ class VisitTime(models.Model):
 
     def __str__(self):
         return f"دکتر {self.doctor.account} {self.weekday} {self.start_time}"
+
+
+class OtpToken(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otp_tokens")
+    otp_code = models.CharField(max_length=6, default=get_random_string(6, allowed_chars='0123456789'))
+    tp_created_at = models.DateTimeField(auto_now_add=True)
+    otp_expires_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f'OTP for {self.user.username}'
