@@ -1,0 +1,10 @@
+volumes:
+  production_db_data: {}
+
+services:
+  django:
+    build: ./
+    volumes:
+      - production_db_data:/app/db
+    ports:
+      - 8000:8000
