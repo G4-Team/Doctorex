@@ -54,7 +54,7 @@ class SignupView(View):
                                                         رمز یکبار مصرف شما برای تأیید ایمیل: {otp.otp_code}
                                                         این رمز تا 5 دقیقه اعتبار دارد.
                                                         از طریق لینک زیر می توانید به فرم ورود رمز یکبار مصرف مراجعه کنید:
-                                                        http://127.0.0.1:8000/account/verify-email/{user.email}
+                                                        http://127.0.0.1:8000/account/verify-email/{user.username}
                                         '''
             sender = 'dctrxspprt@gmail.com'
             receiver = [user.email, ]
@@ -171,7 +171,7 @@ class ResendOtpView(View):
                                             رمز یکبار مصرف شما برای تأیید ایمیل: {otp.otp_code}
                                             این رمز تا 5 دقیقه اعتبار دارد.
                                             از طریق لینک زیر می توانید به فرم ورود رمز یکبار مصرف مراجعه کنید:
-                                            http://127.0.0.1:8000/account/verify-email/{user.email}
+                                            http://127.0.0.1:8000/account/verify-email/{user.username}
                             '''
                     sender = 'dctrxspprt@gmail.com'
                     receiver = [user.email, ]
