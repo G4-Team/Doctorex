@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from user.views import redirect_view
+
 
 urlpatterns = (
     [
@@ -9,6 +11,8 @@ urlpatterns = (
         path("", include("reservation.urls")),
         path("account/", include("user.urls", namespace="account")),
         path("setting/", include("setting.urls", namespace="setting")),
+        path('auth/', include('social_django.urls', namespace='social')),
+        path('accounts/profile/', redirect_view),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -12,7 +12,7 @@ from setting.models import Specialty
 
 class CustomAccountManager(BaseUserManager):
     def create_user(
-        self, email, username, first_name, last_name, password, **extra_fields
+        self, email, username, **extra_fields
     ):
         if not email:
             raise ValueError("لطفاً ایمیل خود را وارد کنید.")
@@ -21,11 +21,8 @@ class CustomAccountManager(BaseUserManager):
         user = self.model(
             email=email,
             username=username,
-            first_name=first_name,
-            last_name=last_name,
             **extra_fields,
         )
-        user.set_password(password)
         user.save()
         return user
 
