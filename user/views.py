@@ -5,14 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.shortcuts import redirect, render
+from django.db.models import Avg
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
-from reservation.models import Comment, Reservation
+from reservation.models import Comment, VisitTime, Reservation
 from user.models import Account, Patient, OtpToken
 
 from .forms import RegisterForm, SigninForm, ProfileForm
-from .models import Doctor
+from .models import Doctor, Patient
 
 
 class SignupView(View):
@@ -245,6 +246,7 @@ class ProfileView(View):
         form = ProfileForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'اطلاعات با موفقیت ذخیره شد.')
             return redirect('profile')
         comments = Comment.objects.filter(author=user)
         return render(request, "user/profile.html", {"form": form, "comments": comments})
@@ -266,6 +268,47 @@ class ProfileCommentView(View):
         user = request.user
         comments = Comment.objects.filter(author=user)
         return render(request, "user/comments.html", {"comments": comments})
+
+
+class DoctorDetailView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request,'برای مشاهده اطلاعات و رزرو، ابتدا وارد شوید.', 'warning')
+            return redirect('account:signin')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, id: int):
+        doctor = Doctor.objects.annotate(
+            average_score=Avg('visittime__reservation__comments__score')
+        ).get(id=id)
+        times = VisitTime.objects.filter(doctor=doctor, is_reserved=False).all()
+        reserved_times = Reservation.objects.filter(patient__account=request.user,
+                                                    visit_time__doctor=doctor).all()
+        comments = Comment.objects.filter(reservation__visit_time__doctor=doctor).all()
+
+        return render(request, 'user/doctor.html',
+                      {'doctor': doctor, 'times': times, 'reserved_times': reserved_times, 'comments': comments})
+
+    def post(self, request, id: int):
+        user = request.user
+        visit_time_id = request.POST.get('time')
+        visit_time = get_object_or_404(VisitTime, id=visit_time_id)
+
+        if user.balance < visit_time.doctor.visit_cost:
+            return redirect('balance')
+
+        user.balance -= visit_time.doctor.visit_cost
+        visit_time.doctor.account.balance += visit_time.doctor.visit_cost
+        user.save()
+        visit_time.doctor.save()
+
+        patient = get_object_or_404(Patient, account=user)
+        Reservation.objects.create(patient=patient, visit_time=visit_time)
+        visit_time.is_reserved = True
+        visit_time.save()
+
+        messages.success(request, 'رزرو شما با موفقیت انجام شد!')
+        return redirect('index')
 
 
 def redirect_view(request):

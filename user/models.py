@@ -86,7 +86,7 @@ class Doctor(models.Model):
     avg_rate = models.FloatField(default=0)
 
     def __str__(self):
-        return f"Dr. {self.account.first_name} {self.account.last_name}"
+        return f"دکتر {self.account.first_name} {self.account.last_name}"
 
 
 class VisitTime(models.Model):

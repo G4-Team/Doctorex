@@ -116,3 +116,13 @@
       </div>
   </div>
 </nav>
+<script>
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var searchContent = document.getElementById('search-input').value;
+      if (searchContent) {
+        this.action = '/search/' + encodeURIComponent(searchContent);
+        this.submit();
+      }
+    });
+</script>
