@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "setting.apps.SettingConfig",
     "reservation.apps.ReservationConfig",
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -29,6 +30,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = "doctorex.urls"
@@ -51,7 +53,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "doctorex.wsgi.application"
 
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -68,7 +69,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = "en-us"
 
@@ -77,7 +77,6 @@ TIME_ZONE = "Asia/Tehran"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
@@ -95,10 +94,21 @@ AUTH_USER_MODEL = "user.Account"
 # default login url
 LOGIN_URL = '/account/signin/'
 
-#google account
+# settings for email OTP account
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+
+# Settings for oauth2 google login plugin
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/auth/complete/google-oauth2/'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+SOCIAL_AUTH_URL_NAMESPACE = 'social'

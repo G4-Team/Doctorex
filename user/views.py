@@ -35,12 +35,13 @@ class SignupView(View):
             user = Account.objects.create_user(
                 cd['email'],
                 cd['username'],
-                cd['first_name'],
-                cd['last_name'],
-                cd['password1'],
-                gender=cd['gender'],
             )
             Patient.objects.create(account=user)
+            user.first_name = cd['first_name']
+            user.last_name = cd['last_name']
+            user.gender = cd['gender']
+            user.set_password(cd['password1'])
+            user.save()
             messages.success(
                 request,
                 "حساب کاربری با موفقیت ایجاد شد. پس از تأیید ایمیل، امکان ورود به سایت را خواهید داشت.",
@@ -265,3 +266,8 @@ class ProfileCommentView(View):
         user = request.user
         comments = Comment.objects.filter(author=user)
         return render(request, "user/comments.html", {"comments": comments})
+
+
+def redirect_view(request):
+    response = redirect('account:profile')
+    return response
