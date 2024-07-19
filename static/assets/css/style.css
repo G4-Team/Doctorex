@@ -1576,8 +1576,8 @@ html {
     margin-bottom: 0px !important;
 }
 
-.specialty-swiper .swiper-slide .item image {
-    width: 95%;
+.specialty-swiper .swiper-slide .item img {
+    width: auto;
     text-align: center;
 }
 
@@ -1659,6 +1659,10 @@ html {
     height: 310px;
     text-align: center;
 
+}
+
+.item img {
+    width: 95%;
 }
 
 /* .doctor-swiper .swiper-slide .item .container {
@@ -1766,4 +1770,16 @@ html {
 
 .item {
     text-align: center;
+}
+
+.content-box {
+    background-color: #fff;
+    box-shadow: var(--shadow-box);
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.content-box:nth-last-child(1) {
+    margin-bottom: 0;
 }
