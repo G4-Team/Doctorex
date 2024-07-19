@@ -30,9 +30,9 @@ class PatientAdmin(admin.ModelAdmin):
 
 
 class VisitTimeAdmin(admin.ModelAdmin):
-    list_display = ('doctor', 'weekday', 'start_time', 'end_time', 'is_reserved')
-    list_filter = ('doctor', 'weekday', 'is_reserved')
-    search_fields = ('doctor__account', 'weekday')
+    list_display = ('doctor', 'date', 'start_time', 'end_time', 'is_reserved')
+    list_filter = ('doctor', 'date', 'is_reserved')
+    search_fields = ('doctor__account', 'date')
     list_editable = ('is_reserved',)
 
 

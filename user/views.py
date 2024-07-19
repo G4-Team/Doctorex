@@ -281,7 +281,7 @@ class DoctorDetailView(View):
         doctor = Doctor.objects.annotate(
             average_score=Avg('visittime__reservation__comments__score')
         ).get(id=id)
-        times = VisitTime.objects.filter(doctor=doctor, is_reserved=False).all()
+        times = VisitTime.objects.filter(doctor=doctor, is_reserved=False, date__gt=timezone.now()).all()
         reserved_times = Reservation.objects.filter(patient__account=request.user,
                                                     visit_time__doctor=doctor).all()
         comments = Comment.objects.filter(reservation__visit_time__doctor=doctor).all()
@@ -307,7 +307,25 @@ class DoctorDetailView(View):
         visit_time.is_reserved = True
         visit_time.save()
 
-        messages.success(request, 'رزرو شما با موفقیت انجام شد!')
+        subject = '[Doctorex] رزرو موفقیت آمیز'
+        message = f'''
+                                                    {user.first_name} عزیز، سلام
+                                                    زمان ملاقات شما با {visit_time.doctor} برای تاریخ {visit_time.date} 
+                                                    از ساعات {visit_time.start_time} تا ساعت {visit_time.end_time} با موفقیت رزرو شده است.
+                                                    آدرس مطب: {visit_time.doctor.clinic_address}
+                                    '''
+        sender = 'dctrxspprt@gmail.com'
+        receiver = [user.email, ]
+
+        send_mail(
+            subject,
+            message,
+            sender,
+            receiver,
+            fail_silently=False,
+        )
+
+        messages.success(request, 'رزرو شما با موفقیت انجام شد! اطلاعات رزرو به ایمیل شما ارسال گردید.')
         return redirect('index')
 
 
