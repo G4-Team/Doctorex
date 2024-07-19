@@ -143,6 +143,7 @@
                         {% if reserved_times %}
                             <form action="{% url 'comment' %}" method="post" class="p-5" dir="rtl">
                                 {% csrf_token %}
+                                <input type="hidden" value="{{doctor.id}}" name="doctor_id">
                                 <div class="form-group">
                                     <label for="username">نام بیمار</label>
                                     <input type="text" class="form-control" name="username" id="username"
