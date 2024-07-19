@@ -8,3 +8,5 @@ services:
       - production_db_data:/app/db
     ports:
       - 8000:8000
+    environment:
+      - DJANGO_SETTINGS_MODULE=doctorex.settings.production
