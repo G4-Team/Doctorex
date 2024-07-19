@@ -1,47 +1,48 @@
+{% load static %}
 <nav>
   <div class="mega-menu d-flex align-items-center justify-content-center">
       <div class="container-fluid">
           <div class="top-menu-parent">
               <div class="row align-items-center">
-                  <div class="col-lg-6 col-sm-12">
+                  <div class="col-lg-4 col-sm-12">
                       <div class="top-menu-menu">
                           <ul class="navbar-nav align-items-center">
                               <li class="position-relative m-0"></li>
-                              <li class="nav-item main-menu-head"><a href=""
-                                      class="nav-link border-animate main-color-one-bg fromCenter btn nav-active fw-bold"><i
-                                          class="bi bi-plus"></i>
-                                      گرفتن نوبت
+                              <li class="nav-item main-menu-head">
+                                  <a href="{% url 'index' %}"
+                                      class="nav-link border-animate main-color-one-bg fromCenter btn nav-active fw-bold">
+                                    <img src="{% static 'assets/image/doctorex-mini.png' width='85' height='50' %}" alt="Home" class="navbar-logo">
                                   </a>
                               </li>
-                              <li class="nav-item">
-                                  <a href="" class="nav-link border-animate fromCenter">
-                                      |
-                                      <i class="bi bi-list"></i>
-                                      &nbsp;
-                                      لیست تخصص‌ها
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="" class="nav-link border-animate fromCenter">
-                                      |
-                                      <i class="bi bi-bandaid-fill"></i>
-                                      &nbsp;
-                                      لیست پزشکان
-                                  </a>
-                              </li>
-
-                              <li class="nav-item">
-                                  <a href="" class="nav-link border-animate fromCenter">
-                                      |
-                                      <i class="bi bi-heart-pulse-fill"></i>
-                                      &nbsp;
-                                      مجله سلامت
-                                  </a>
-                              </li>
+{#                              <li class="nav-item">#}
+{#                                  <a href="" class="nav-link border-animate fromCenter">#}
+{#                                      |#}
+{#                                      <i class="bi bi-list"></i>#}
+{#                                      &nbsp;#}
+{#                                      لیست تخصص‌ها#}
+{#                                  </a>#}
+{#                              </li>#}
+{#                              <li class="nav-item">#}
+{#                                  <a href="" class="nav-link border-animate fromCenter">#}
+{#                                      |#}
+{#                                      <i class="bi bi-bandaid-fill"></i>#}
+{#                                      &nbsp;#}
+{#                                      لیست پزشکان#}
+{#                                  </a>#}
+{#                              </li>#}
+{##}
+{#                              <li class="nav-item">#}
+{#                                  <a href="" class="nav-link border-animate fromCenter">#}
+{#                                      |#}
+{#                                      <i class="bi bi-heart-pulse-fill"></i>#}
+{#                                      &nbsp;#}
+{#                                      مجله سلامت#}
+{#                                  </a>#}
+{#                              </li>#}
                           </ul>
                       </div>
                   </div>
-                  <div class="col-lg-4 col-sm-8">
+                  <div class="col-lg-6 col-sm-8">
                       <div class="search-form">
                           <form action="{% url "reservation:search" %}" method="get">
                               <div class="search-filed">
@@ -116,3 +117,13 @@
       </div>
   </div>
 </nav>
+<script>
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var searchContent = document.getElementById('search-input').value;
+      if (searchContent) {
+        this.action = '/search/' + encodeURIComponent(searchContent);
+        this.submit();
+      }
+    });
+</script>
