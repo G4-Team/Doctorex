@@ -22,7 +22,7 @@ class SignupView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -78,7 +78,7 @@ class SigninView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -101,7 +101,7 @@ class SigninView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'با موفقیت وارد شدید!', 'success')
-                return redirect('index')
+                return redirect('reservation:index')
             messages.error(request, 'نام کاربری یا کلمه عبور اشتباه است.', 'warning')
         return render(request, self.template_name, {"form": form})
 
@@ -110,7 +110,7 @@ class SignoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         messages.success(request, 'به امید دیدار مجدد', 'success')
-        return redirect('index')
+        return redirect('reservation:index')
 
 
 class VerifyEmailView(View):
@@ -118,12 +118,12 @@ class VerifyEmailView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, username):
         if not Account.objects.filter(username=username).exists():
-            return redirect('index')
+            return redirect('reservation:index')
         elif Account.objects.get(username=username).is_active:
             return redirect('account:signin')
         return render(request, self.template_name)
@@ -150,7 +150,7 @@ class ResendOtpView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -326,7 +326,7 @@ class DoctorDetailView(View):
         )
 
         messages.success(request, 'رزرو شما با موفقیت انجام شد! اطلاعات رزرو به ایمیل شما ارسال گردید.')
-        return redirect('index')
+        return redirect('reservation:index')
 
 
 def redirect_view(request):
