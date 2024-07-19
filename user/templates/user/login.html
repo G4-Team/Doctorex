@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctorex|Login{% endblock %}
+
+{% block body %}
+    <h2>Login Now!</h2>
+    <div class="d-flex justify-content-center full-height">
+        <div class="row bg-white p-5 border rounded">
+            <div class="col-12">
+                <h2 class="text-center">Login</h2>
+            </div>
+            <div class="col-12">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email"
+                               placeholder="ایمیل خود را وارد کنید">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password"
+                               placeholder="رمز عبور">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <a href="{% url 'account:signup' %}" class="btn btn-success btn-block">Register</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

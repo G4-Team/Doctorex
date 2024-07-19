@@ -19,6 +19,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <input type='submit' value="ورود" class="btn btn-primary">
+            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger" role="button">ورود با گوگل</a>
         </form>
     </div>
 {% endblock body %}

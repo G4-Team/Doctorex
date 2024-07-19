@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="content d-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row">
+                <div
+                        class="header-content mb-4 bg-white shadow-box rounded-3 p-3 d-flex align-items-center justify-content-center flex-wrap">
+                    <div class="title d-flex align-items-center justify-content-center">
+                        <h5 class="font-12 ms-3"><span class="d-inline-block ms-1">لیست پزشک‌ها</span></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="swiper doctor-swiper">
+                    <div class="swiper-wrapper">
+                        {% for doctor in doctors %}
+                            <a>
+                            <div class="swiper-slide justify-content-center align-content-center">
+                                <div class="item">
+                                    <p class="pheader">{{ doctor.account.first_name }} {{ doctor.account.last_name }}</p>
+                                    {% if doctor.account.image %}
+                                        <img src="{{ doctor.account.image.url }}">
+                                    {% endif %}
+                                    <div class="container text-center">
+                                        <div class="row">
+                                            <div class="col-8 align-self-end">
+                                                <p class="pfooter">{{ doctor.specialty.specialty }}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="pfooter">امتیاز
+                                                    {% if doctor.average_score %}{{ doctor.average_score }}{% else %}
+                                                        * {% endif %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block js_script %}
+    <script>
+        $(document).on('htmx:afterSwap', function(event) {
+            if ($(event.target).is('#specialties-list')) {
+                $.getScript("{% static "assets/js/app.js" %}")
+                    .done(function(script, textStatus) {
+                    })
+                    .fail(function(jqxhr, settings, exception) {
+                    });
+            }
+        });
+        $(document).on('htmx:afterSwap', function(event) {
+            if ($(event.target).is('#doctors-list')) {
+                $.getScript("{% static "assets/js/app.js" %}")
+                    .done(function(script, textStatus) {
+                    })
+                    .fail(function(jqxhr, settings, exception) {
+                    });
+            }
+        });
+    </script>
+{% endblock js_script %}

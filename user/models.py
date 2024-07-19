@@ -12,7 +12,7 @@ from setting.models import Specialty
 
 class CustomAccountManager(BaseUserManager):
     def create_user(
-        self, email, username, first_name, last_name, password, **extra_fields
+        self, email, username, **extra_fields
     ):
         if not email:
             raise ValueError("لطفاً ایمیل خود را وارد کنید.")
@@ -21,11 +21,8 @@ class CustomAccountManager(BaseUserManager):
         user = self.model(
             email=email,
             username=username,
-            first_name=first_name,
-            last_name=last_name,
             **extra_fields,
         )
-        user.set_password(password)
         user.save()
         return user
 
@@ -89,27 +86,18 @@ class Doctor(models.Model):
     avg_rate = models.FloatField(default=0)
 
     def __str__(self):
-        return f"Dr. {self.account.first_name} {self.account.last_name}"
+        return f"دکتر {self.account.first_name} {self.account.last_name}"
 
 
 class VisitTime(models.Model):
-    WEEK_DAYS = {
-        "SAT": "شنبه",
-        "SUN": "یکشنبه",
-        "MON": "دوشنبه",
-        "TUE": "سه شنبه",
-        "WED": "چهارشنبه",
-        "THU": "پنج شنبه",
-        "FRI": "جمعه",
-    }
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    weekday = models.CharField(max_length=3, choices=WEEK_DAYS)
+    date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
     is_reserved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"دکتر {self.doctor.account} {self.weekday} {self.start_time}"
+        return f"دکتر {self.doctor.account} {self.date} {self.start_time}"
 
 
 class OtpToken(models.Model):

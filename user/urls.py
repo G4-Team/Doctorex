@@ -7,6 +7,7 @@ app_name = "account"
 
 doctor_urls = [
     path("list/", views.DoctorListView.as_view(), name="doctors-list"),
+    path("<int:id>/", views.DoctorDetailView.as_view(), name="doctors-detail"),
 ]
 
 urlpatterns = [
