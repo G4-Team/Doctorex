@@ -16,11 +16,11 @@ class Transaction(models.Model):
 
 class Comment(models.Model):
     scores = {
-        1: "very bad",
-        2: "bad",
-        3: "not bad",
-        4: "good",
-        5: "very good",
+        1: "خیلی بد",
+        2: "بد",
+        3: "متوسط",
+        4: "خوب",
+        5: "خیلی خوب",
     }
     author = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name="comments"

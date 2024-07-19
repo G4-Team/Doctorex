@@ -5,14 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.shortcuts import redirect, render
+from django.db.models import Avg
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
-from reservation.models import Comment, Reservation
+from reservation.models import Comment, VisitTime, Reservation
 from user.models import Account, Patient, OtpToken
 
 from .forms import RegisterForm, SigninForm, ProfileForm
-from .models import Doctor
+from .models import Doctor, Patient
 
 
 class SignupView(View):
@@ -21,7 +22,7 @@ class SignupView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -35,12 +36,13 @@ class SignupView(View):
             user = Account.objects.create_user(
                 cd['email'],
                 cd['username'],
-                cd['first_name'],
-                cd['last_name'],
-                cd['password1'],
-                gender=cd['gender'],
             )
             Patient.objects.create(account=user)
+            user.first_name = cd['first_name']
+            user.last_name = cd['last_name']
+            user.gender = cd['gender']
+            user.set_password(cd['password1'])
+            user.save()
             messages.success(
                 request,
                 "حساب کاربری با موفقیت ایجاد شد. پس از تأیید ایمیل، امکان ورود به سایت را خواهید داشت.",
@@ -76,7 +78,7 @@ class SigninView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -99,7 +101,7 @@ class SigninView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'با موفقیت وارد شدید!', 'success')
-                return redirect('index')
+                return redirect('reservation:index')
             messages.error(request, 'نام کاربری یا کلمه عبور اشتباه است.', 'warning')
         return render(request, self.template_name, {"form": form})
 
@@ -108,7 +110,7 @@ class SignoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         messages.success(request, 'به امید دیدار مجدد', 'success')
-        return redirect('index')
+        return redirect('reservation:index')
 
 
 class VerifyEmailView(View):
@@ -116,12 +118,12 @@ class VerifyEmailView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, username):
         if not Account.objects.filter(username=username).exists():
-            return redirect('index')
+            return redirect('reservation:index')
         elif Account.objects.get(username=username).is_active:
             return redirect('account:signin')
         return render(request, self.template_name)
@@ -148,7 +150,7 @@ class ResendOtpView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('reservation:index')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -244,6 +246,7 @@ class ProfileView(View):
         form = ProfileForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'اطلاعات با موفقیت ذخیره شد.')
             return redirect('profile')
         comments = Comment.objects.filter(author=user)
         return render(request, "user/profile.html", {"form": form, "comments": comments})
@@ -265,3 +268,67 @@ class ProfileCommentView(View):
         user = request.user
         comments = Comment.objects.filter(author=user)
         return render(request, "user/comments.html", {"comments": comments})
+
+
+class DoctorDetailView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request,'برای مشاهده اطلاعات و رزرو، ابتدا وارد شوید.', 'warning')
+            return redirect('account:signin')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, id: int):
+        doctor = Doctor.objects.annotate(
+            average_score=Avg('visittime__reservation__comments__score')
+        ).get(id=id)
+        times = VisitTime.objects.filter(doctor=doctor, is_reserved=False, date__gt=timezone.now()).all()
+        reserved_times = Reservation.objects.filter(patient__account=request.user,
+                                                    visit_time__doctor=doctor).all()
+        comments = Comment.objects.filter(reservation__visit_time__doctor=doctor).all()
+
+        return render(request, 'user/doctor.html',
+                      {'doctor': doctor, 'times': times, 'reserved_times': reserved_times, 'comments': comments})
+
+    def post(self, request, id: int):
+        user = request.user
+        visit_time_id = request.POST.get('time')
+        visit_time = get_object_or_404(VisitTime, id=visit_time_id)
+
+        if user.balance < visit_time.doctor.visit_cost:
+            return redirect('balance')
+
+        user.balance -= visit_time.doctor.visit_cost
+        visit_time.doctor.account.balance += visit_time.doctor.visit_cost
+        user.save()
+        visit_time.doctor.save()
+
+        patient = get_object_or_404(Patient, account=user)
+        Reservation.objects.create(patient=patient, visit_time=visit_time)
+        visit_time.is_reserved = True
+        visit_time.save()
+
+        subject = '[Doctorex] رزرو موفقیت آمیز'
+        message = f'''
+                                                    {user.first_name} عزیز، سلام
+                                                    زمان ملاقات شما با {visit_time.doctor} برای تاریخ {visit_time.date} 
+                                                    از ساعات {visit_time.start_time} تا ساعت {visit_time.end_time} با موفقیت رزرو شده است.
+                                                    آدرس مطب: {visit_time.doctor.clinic_address}
+                                    '''
+        sender = 'dctrxspprt@gmail.com'
+        receiver = [user.email, ]
+
+        send_mail(
+            subject,
+            message,
+            sender,
+            receiver,
+            fail_silently=False,
+        )
+
+        messages.success(request, 'رزرو شما با موفقیت انجام شد! اطلاعات رزرو به ایمیل شما ارسال گردید.')
+        return redirect('reservation:index')
+
+
+def redirect_view(request):
+    response = redirect('account:profile')
+    return response
