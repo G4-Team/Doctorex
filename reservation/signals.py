@@ -13,7 +13,6 @@ def update_avg_rate_when_new_comment(
     created: bool,
     **kwargs,
 ):
-    reset_queries()
     if created:
         with transaction.atomic():
             count = Comment.objects.filter(doctor__id=instance.doctor.pk).count()
@@ -21,8 +20,6 @@ def update_avg_rate_when_new_comment(
                 F("avg_rate") * (count - 1) + instance.score
             ) / (count)
             instance.doctor.save()
-    for q in connection.queries:
-        print(q)
 
 
 @receiver(signal=post_delete, sender=Comment)
@@ -31,7 +28,6 @@ def update_avg_rate_when_delete_comment(
     instance: Comment,
     **kwargs,
 ):
-    reset_queries()
     with transaction.atomic():
         count = Comment.objects.filter(doctor__id=instance.doctor.pk).count()
         if count == 0:
@@ -41,5 +37,3 @@ def update_avg_rate_when_delete_comment(
                 F("avg_rate") * (count + 1) - instance.score
             ) / (count)
         instance.doctor.save()
-    for q in connection.queries:
-        print(q)
