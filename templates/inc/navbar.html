@@ -44,10 +44,10 @@
                   </div>
                   <div class="col-lg-6 col-sm-8">
                       <div class="search-form">
-                          <form action="">
+                        <form action="{% url "search" %}" method="get">
                               <div class="search-filed">
                                   <input type="text" placeholder="جستجوی پزشکان ..."
-                                      class="form-control search-input">
+                                  class="form-control search-input" name="search">
                                   <button type="submit" class="btn search-btn main-color-one-bg rounded-pill"><i
                                           class="bi bi-search"></i></button>
                               </div>
