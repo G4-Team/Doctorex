@@ -24,6 +24,7 @@
                 <div class="row overflow-auto">
                     {% for doctor in doctors %}
                         <div class="col-lg-4 glass">
+                            <a href="{% url 'account:doctors-detail' id=doctor.id %}">
                             <div class="item" style="margin-right: 20px;">
                                 <p class="pheader">{{doctor.account.first_name}} {{doctor.account.last_name}}</p>
                                 <img src="{{doctor.account.image.url}}">
@@ -33,6 +34,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </a>
                         </div>
                     {% endfor %}
                 </div>
