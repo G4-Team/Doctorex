@@ -40,7 +40,7 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(
-            email, username, first_name, last_name, password, **extra_fields
+            email, username, **extra_fields
         )
 
 
