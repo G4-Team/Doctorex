@@ -334,6 +334,7 @@ class ProfileCommentViewTest(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.comments_url = reverse('account:comments')
         self.user = Account.objects.create_user(
             email='user@example.com',
             username='user',
@@ -383,21 +384,10 @@ class ProfileCommentViewTest(TestCase):
             doctor=self.doctor,
             reservation=self.reservation
         )
-        self.comments_url = reverse("reservation:comment", kwargs={"doctor_id": self.doctor.id})
         self.client.login(username='user@example.com', password='Kia6382568668')
 
     def test_profile_comment_view(self):
         response = self.client.get(self.comments_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'reservation/comment-new.html')
+        self.assertTemplateUsed(response, 'user/comments.html')
         self.assertContains(response, 'Great Doctor')
-
-        response = self.client.post(self.comments_url, {
-            'doctor_id': self.doctor.id,
-            'time': self.reservation.id,
-            'title': 'New Comment',
-            'text': 'This is a new comment.',
-            'score': 4,
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'نظر شما با موفقیت ثبت گردید')
