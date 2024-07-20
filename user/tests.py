@@ -1,9 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model, authenticate
-from django.contrib.auth.models import User
-from django.contrib import messages
-from datetime import time, date
+from unittest.mock import patch
 from io import BytesIO
 from PIL import Image
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -78,7 +76,7 @@ class SignupViewTest(TestCase):
             last_name='User',
             is_active=True,
         )
-        self.client.login(username='authuser', password='password123')
+        self.client.login(username='authuser@example.com', password='password123')
         response = self.client.get(self.signup_url)
         self.assertRedirects(response, reverse('reservation:index'))
 
@@ -138,7 +136,7 @@ class SignoutViewTest(TestCase):
             last_name='User',
             is_active=True,
         )
-        self.client.login(username='testuser', password='password123')
+        self.client.login(username='testuser@example.com', password='password123')
 
     def test_signout(self):
         response = self.client.get(self.signout_url)
@@ -215,6 +213,7 @@ class DoctorListViewTest(TestCase):
             last_name='Tor',
             password='password123',
             is_active=True,
+            is_doctor=True,
         )
 
         self.doctor = Doctor.objects.create(
@@ -307,15 +306,16 @@ class ProfileVisitHistoryTest(TestCase):
                     last_name='Tor',
                     password='password123',
                     is_active=True,
+                    is_doctor=True,
                 ),
                 specialty=Specialty.objects.create(
                     specialty='Cardiology',
                     slug='cardiology',
                     image=SimpleUploadedFile('test_image.jpg', image.getvalue())
             ),
-            date=date(2024,7,20),
-            start_time=time(9, 0),
-            end_time=time(10, 0),
+            date='2024-07-20',
+            start_time="09:00:00",
+            end_time="10:00:00",
             is_reserved=True,
         ))
         self.reservation = Reservation.objects.create(
@@ -345,6 +345,7 @@ class ProfileCommentViewTest(TestCase):
             gender="M",
             is_active=True,
         )
+
         image = BytesIO()
         Image.new('RGB', (100, 100)).save(image, format='JPEG')
         image.seek(0)
@@ -357,8 +358,6 @@ class ProfileCommentViewTest(TestCase):
         self.doctor_account = Account.objects.create_user(
             email='doctor@example.com',
             username='doctor',
-            first_name='Doc',
-            last_name='Tor',
             password='Kia6382568668',
             is_doctor=True,
         )
@@ -386,13 +385,14 @@ class ProfileCommentViewTest(TestCase):
             doctor=self.doctor,
             reservation=self.reservation
         )
-        logged_in = self.client.login(username='user@example.com', password='Kia6382568.668')
-        print(1)
-        print("Logged in:", logged_in)
+
+        with patch('user.models.OtpToken.objects.filter') as mock_otp_filter:
+            mock_otp_filter.return_value.last.return_value = None
+            logged_in = self.client.login(username='user@example.com', password='Kia6382568668')
+            print("Logged in:", logged_in)
 
     def test_profile_comment_view(self):
         response = self.client.get(self.comments_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/comments.html')
-        self.assertContains(response, 'Great doctor!')
-
+        self.assertContains(response, 'Great Doctor')
