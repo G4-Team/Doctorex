@@ -12,7 +12,7 @@ from setting.models import Specialty
 
 class CustomAccountManager(BaseUserManager):
     def create_user(
-        self, email, username, **extra_fields
+        self, email, username,password=None, **extra_fields
     ):
         if not email:
             raise ValueError("لطفاً ایمیل خود را وارد کنید.")
@@ -23,6 +23,9 @@ class CustomAccountManager(BaseUserManager):
             username=username,
             **extra_fields,
         )
+        if password:
+            user.set_password(password)
+        user.save(using=self._db)
         user.save()
         return user
 
@@ -40,7 +43,7 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(
-            email, username, **extra_fields
+            email, username,password, **extra_fields
         )
 
 

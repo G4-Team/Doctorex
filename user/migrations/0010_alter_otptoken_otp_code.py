@@ -13,5 +13,5 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='otptoken',
             name='otp_code',
-            field=models.CharField(default='265196', max_length=6),
+            field=models.CharField(default='265196', max_length=6),)
     ]
