@@ -27,7 +27,24 @@ class SearchView(View):
 
 
 class CommentView(View):
-    def post(self, request):
+    form_class = CommentForm
+    template_name = "reservation/comment-new.html"
+
+    def get(self, request, doctor_id):
+        reserved_times = Reservation.objects.filter(
+            patient__account=request.user, visit_time__doctor__id=doctor_id
+        ).all()
+        return render(
+            request,
+            self.template_name,
+            {
+                "doctor_id": doctor_id,
+                "reserved_times": reserved_times,
+                "form": self.form_class,
+            },
+        )
+
+    def post(self, request, doctor_id):
         form = CommentForm(request.POST)
 
         if form.is_valid():
@@ -39,8 +56,44 @@ class CommentView(View):
             )
             comment.save()
             messages.success(request, "نظر شما با موفقیت ثبت گردید")
-            previous_url = request.META.get("HTTP_REFERER")
-            return HttpResponseRedirect(previous_url)
+            doctor = (
+                Doctor.objects.select_related("specialty")
+                .only(
+                    "avg_rate",
+                    "specialty__specialty",
+                )
+                .get(id=doctor_id)
+            )
+            comments = Comment.objects.filter(
+                reservation__visit_time__doctor__id=doctor_id
+            ).all()
+            reserved_times = Reservation.objects.filter(
+                patient__account=request.user, visit_time__doctor__id=doctor_id
+            ).all()
+            return render(
+                request,
+                self.template_name,
+                {
+                    "doctor_id": doctor_id,
+                    "doctor": doctor,
+                    "comments": comments,
+                    "reserved_times": reserved_times,
+                    "form": self.form_class,
+                },
+            )
+
+        reserved_times = Reservation.objects.filter(
+            patient__account=request.user, visit_time__doctor__id=doctor_id
+        ).all()
+        return render(
+            request,
+            self.template_name,
+            {
+                "doctor_id": doctor_id,
+                "reserved_times": reserved_times,
+                "form": form,
+            },
+        )
 
 
 class CommentEditView(View):
@@ -50,7 +103,11 @@ class CommentEditView(View):
         if comment.author != request.user:
             return redirect("index")
 
-        return render(request, "comment.html", {"comment": comment})
+        return render(
+            request,
+            "reservation/comment-edit.html",
+            {"comment": comment},
+        )
 
     def post(self, request, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -65,4 +122,8 @@ class CommentEditView(View):
             return redirect("index")
 
         print(form.errors)
-        return render(request, "comment.html", {"comment": comment})
+        return render(
+            request,
+            "reservation/comment-edit.html",
+            {"comment": comment},
+        )
