@@ -360,7 +360,7 @@ class DoctorDetailView(View):
             request,
             "رزرو شما با موفقیت انجام شد! اطلاعات رزرو به ایمیل شما ارسال گردید.",
         )
-        return redirect("index")
+        return redirect("reservation:index")
 
 
 def redirect_view(request):
