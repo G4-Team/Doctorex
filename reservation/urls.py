@@ -2,6 +2,9 @@ from django.urls import include, path
 
 from . import views
 
+
+app_name = "reservation"
+
 comment_urls = [
     path("new-comment/<int:doctor_id>/", views.CommentView.as_view(), name="comment"),
     path(

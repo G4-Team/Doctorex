@@ -25,7 +25,7 @@
                                 {{ comment.author.first_name}} {{ comment.author.last_name }}
                             </p>
                             {% if comment.author.id == user.id %}
-                            <a href="{% url 'comment-edit' comment_id=comment.id %}" disabled=""><i
+                            <a href="{% url 'reservation:comment-edit' comment_id=comment.id %}" disabled=""><i
                                     class="fas fa-reply fa-xs"></i><span
                                     class="small"> edit</span></a>
                             {% endif %}
@@ -41,8 +41,8 @@
         {% endfor %}
     </div>
 {% endif %}
-<form action="{% url 'comment' doctor_id %}" method="post" class="p-5" dir="rtl"
-    hx-post="{% url 'comment' doctor_id %}"
+<form action="{% url 'reservation:comment' doctor_id %}" method="post" class="p-5" dir="rtl"
+    hx-post="{% url 'reservation:comment' doctor_id %}"
     hx-trigger="submit"
     hx-target="#new-comment"
     hx-swap="innerHTML"

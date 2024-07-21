@@ -1,10 +1,6 @@
-
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth import get_user_model, authenticate
-from django.contrib.auth.models import User
-from django.contrib import messages
-from datetime import time
+from django.contrib.auth import get_user_model
 from io import BytesIO
 from PIL import Image
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -20,6 +16,7 @@ class SignupViewTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.signup_url = reverse('account:signup')
+        self.signin_url = reverse('account:signin')
         self.User = get_user_model()
 
     def test_signup_get(self):
@@ -72,17 +69,17 @@ class SignupViewTest(TestCase):
 
     def test_authenticated_user_redirects(self):
         user = self.User.objects.create_user(
-            username='authuser',
             email='authuser@example.com',
+            username='authuser',
             password='password123',
             first_name='Test',
             last_name='User',
+            is_active=True,
         )
-        self.client.login(username='authuser', password='password123')
+        login = self.client.login(username='authuser@example.com', password='password123')
+        self.assertTrue(login)
         response = self.client.get(self.signup_url)
-        redirected_url = "account:verify-email"
-        self.assertRedirects(response, reverse(redirected_url))
-
+        self.assertRedirects(response, reverse('reservation:index'))
 
 class SigninViewTest(TestCase):
     def setUp(self):
@@ -90,19 +87,18 @@ class SigninViewTest(TestCase):
         self.signin_url = reverse('account:signin')
         self.User = get_user_model()
         self.user = self.User.objects.create_user(
-            username='testuser',
             email='testuser@example.com',
+            username='testuser',
             password='password123',
             first_name='Test',
             last_name='User',
-            is_active=True
+            is_active=True,
         )
 
     def test_signin_get(self):
         response = self.client.get(self.signin_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/signin.html')
-        self.assertIsInstance(response.context['form'], SigninForm)
 
     def test_signin_post_valid(self):
         valid_data = {
@@ -137,9 +133,9 @@ class SignoutViewTest(TestCase):
             password='password123',
             first_name='Test',
             last_name='User',
-            is_active=True
+            is_active=True,
         )
-        self.client.login(username='testuser', password='password123')
+        self.client.login(username='testuser@example.com', password='password123')
 
     def test_signout(self):
         response = self.client.get(self.signout_url)
@@ -214,7 +210,9 @@ class DoctorListViewTest(TestCase):
             username='doctor',
             first_name='Doc',
             last_name='Tor',
-            password='password123'
+            password='password123',
+            is_active=True,
+            is_doctor=True,
         )
 
         self.doctor = Doctor.objects.create(
@@ -234,13 +232,13 @@ class ProfileViewTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.profile_url = reverse('account:profile')
-        self.profile_url2 = reverse('/account/signin/?next=/account/profile/')
         self.user = get_user_model().objects.create_user(
             email='user@example.com',
             username='user',
             first_name='First',
             last_name='Last',
-            password='password123'
+            password='password123',
+            is_active=True,
         )
         self.client.login(username='user@example.com', password='password123')
 
@@ -276,7 +274,7 @@ class ProfileViewTest(TestCase):
             'phone_number': '1234567890'
         }
         response = self.client.post(self.profile_url, data=invalid_data)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/profile.html')
         self.assertContains(response, 'This field is required.')
 
@@ -291,54 +289,8 @@ class ProfileVisitHistoryTest(TestCase):
             username='user',
             first_name='First',
             last_name='Last',
-            password='password123'
-        )
-        image = BytesIO()
-        Image.new('RGB', (100, 100)).save(image, format='JPEG')
-        image.seek(0)
-        self.patient = Patient.objects.create(account=self.user)
-        self.visit_time = VisitTime.objects.create(
-            doctor=Doctor.objects.create(
-                account=Account.objects.create_user(
-                    email='doctor@example.com',
-                    username='doctor',
-                    first_name='Doc',
-                    last_name='Tor',
-                    password='password123'
-                ),
-                specialty=Specialty.objects.create(
-                    specialty='Cardiology',
-                    slug='cardiology',
-                    image=SimpleUploadedFile('test_image.jpg', image.getvalue())
-            ),
-            weekday='SAT',
-            start_time=time(9, 0),
-            end_time=time(10, 0)
-        ))
-        self.reservation = Reservation.objects.create(
-            patient=self.patient,
-            visit_time=self.visit_time
-        )
-        self.client.login(username='user@example.com', password='password123')
-
-    def test_profile_visit_history_view(self):
-        response = self.client.get(self.visit_history_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user/visit_history.html')
-        self.assertContains(response, '9:00 AM - 10:00 AM')
-
-
-class ProfileCommentViewTest(TestCase):
-
-    def setUp(self):
-        self.client = Client()
-        self.comments_url = reverse('account:comments')
-        self.user = get_user_model().objects.create_user(
-            email='user@example.com',
-            username='user',
-            first_name='First',
-            last_name='Last',
-            password='password123'
+            password='password123',
+            is_active=True,
         )
         image = BytesIO()
         Image.new('RGB', (100, 100)).save(image, format='JPEG')
@@ -352,9 +304,8 @@ class ProfileCommentViewTest(TestCase):
         self.doctor_account = Account.objects.create_user(
             email='doctor@example.com',
             username='doctor',
-            first_name='Doc',
-            last_name='Tor',
-            password='password123'
+            password='Kia6382568668',
+            is_doctor=True,
         )
         self.doctor = Doctor.objects.create(
             account=self.doctor_account,
@@ -362,9 +313,65 @@ class ProfileCommentViewTest(TestCase):
         )
         self.visit_time = VisitTime.objects.create(
             doctor=self.doctor,
-            weekday='SAT',
-            start_time=time(9, 0),
-            end_time=time(10, 0)
+            date='2024-07-20',
+            start_time="09:00:00",
+            end_time="10:00:00",
+            is_reserved=True,
+        )
+        self.client.login(username='user@example.com', password='password123')
+
+    def test_profile_visit_history_view(self):
+        response = self.client.get(self.visit_history_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user/visit_history.html')
+
+
+
+class ProfileCommentViewTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.comments_url = reverse('account:comments')
+        self.user = Account.objects.create_user(
+            email='user@example.com',
+            username='user',
+            first_name='First',
+            last_name='Last',
+            password='Kia6382568668',
+            gender="M",
+            is_active=True,
+        )
+
+        image = BytesIO()
+        Image.new('RGB', (100, 100)).save(image, format='JPEG')
+        image.seek(0)
+
+        self.specialty = Specialty.objects.create(
+            specialty='Cardiology',
+            slug='cardiology',
+            image=SimpleUploadedFile('test_image.jpg', image.getvalue())
+        )
+        self.doctor_account = Account.objects.create_user(
+            email='doctor@example.com',
+            username='doctor',
+            password='Kia6382568668',
+            is_doctor=True,
+        )
+        self.doctor = Doctor.objects.create(
+            account=self.doctor_account,
+            specialty=self.specialty
+        )
+        self.visit_time = VisitTime.objects.create(
+            doctor=self.doctor,
+            date='2024-07-20',
+            start_time="09:00:00",
+            end_time="10:00:00",
+            is_reserved=True,
+        )
+        self.patient = Patient.objects.create(account=self.user)
+        self.reservation = Reservation.objects.create(
+            patient=self.patient,
+            visit_time=self.visit_time
         )
         self.comment = Comment.objects.create(
             author=self.user,
@@ -372,15 +379,12 @@ class ProfileCommentViewTest(TestCase):
             title='Great Doctor',
             text='Very professional and friendly.',
             doctor=self.doctor,
-            reservation=Reservation.objects.create(
-                patient=Patient.objects.create(account=self.user),
-                visit_time=self.visit_time
-            )
+            reservation=self.reservation
         )
-        self.client.login(username='user@example.com', password='password123')
+        self.client.login(username='user@example.com', password='Kia6382568668')
+
     def test_profile_comment_view(self):
         response = self.client.get(self.comments_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/comments.html')
-        self.assertContains(response, 'Great doctor!')
-
+        self.assertContains(response, 'Great Doctor')

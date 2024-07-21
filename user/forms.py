@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from user.models import Account
 
 
@@ -58,6 +58,39 @@ class SigninForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    username = forms.CharField(
+        label='Username',
+        min_length=3,
+        max_length=20,
+        validators=[MinLengthValidator(3), MaxLengthValidator(20)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    first_name = forms.CharField(
+        label='First Name',
+        min_length=3,
+        max_length=20,
+        validators=[MinLengthValidator(3), MaxLengthValidator(20)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = forms.CharField(
+        label='Last Name',
+        min_length=3,
+        max_length=20,
+        validators=[MinLengthValidator(3), MaxLengthValidator(20)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
+    phone_number = forms.CharField(
+        label='Phone Number',
+        min_length=3,
+        max_length=20,
+        validators=[MinLengthValidator(3), MaxLengthValidator(10)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = Account
-        fields = ['username', 'first_name', 'last_name', 'email', 'gender', 'phone_number']
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone_number']

@@ -43,7 +43,7 @@
                                                                         {{ comment.author.first_name}} {{ comment.author.last_name }}
                                                                     </p>
                                                                     {% if comment.author.id == user.id %}
-                                                                    <a href="{% url 'comment-edit' comment_id=comment.id %}" disabled=""><i
+                                                                    <a href="{% url 'reservation:comment-edit' comment_id=comment.id %}" disabled=""><i
                                                                             class="fas fa-reply fa-xs"></i><span
                                                                             class="small"> edit</span></a>
                                                                     {% endif %}
@@ -120,7 +120,7 @@
                         {% if reserved_times %}
                         <div 
                             id="new-comment"
-                            hx-get={% url "comment" doctor.id %}
+                            hx-get={% url "reservation:comment" doctor.id %}
                             hx-trigger="load"
                             hx-swap="innerHTML"
                             hx-target="#new-comment"
