@@ -27,10 +27,11 @@ python manage.py makemigrations
 ```
 python manage.py migrate
 ```
-6- make default specialties and related images
+6- make default specialties, related images & sample doctors
 ```
 python manage.py collectmedia
 python manage.py loaddata specialties
+python manage.py loaddata doctors
 ```
 7- create an admin
 ```
