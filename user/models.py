@@ -45,6 +45,12 @@ class CustomAccountManager(BaseUserManager):
         return self.create_user(
             email, username,password, **extra_fields
         )
+        user.first_name = first_name
+        user.last_name = last_name
+        user.set_password(password)
+        user.save()
+
+        return user
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
